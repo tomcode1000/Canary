@@ -1,3 +1,5 @@
+import { startCircuit } from "./landing.js";
+
 // The page. Everything quantum happens in Python (engine/bridge.py); this
 // file only draws. `start(api, odds)` is called by main.js on Qollab and by
 // local.js on the dev server, each passing the same api:
@@ -335,6 +337,14 @@ export async function start(api, odds) {
   $("#send").addEventListener("click", () => send(true));
   $("#reveal").addEventListener("click", () => reveal($("#servers")));
   document.querySelectorAll("#kindSeg button").forEach((b) => b.addEventListener("click", () => runSmart(b.dataset.kind)));
+  startCircuit($("#circuit"));
+  const show = (consoleOn) => {
+    $("#landing").hidden = consoleOn;
+    $("#console").hidden = !consoleOn;
+    window.scrollTo(0, 0);
+  };
+  $("#openConsole").addEventListener("click", () => show(true));
+  $("#backToStart").addEventListener("click", () => show(false));
   drawCatch();
   drawSweep();
   drawCoverage();

@@ -17,19 +17,33 @@
   <symbol id="tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
 </svg>
 
+<section class="landing" id="landing">
+  <canvas class="landing-circuit" id="circuit" aria-hidden="true"></canvas>
+  <div class="landing-in">
+    <span class="mark mark-lg"><svg class="i"><use href="#bird"/></svg> Canary</span>
+    <h1>Catch a quantum cloud that cheats.</h1>
+    <p class="landing-lede">A quantum computer's answer can't be checked by a normal computer. That's the point of it. So when you rent one over the cloud, how do you know it did the work? Canary hides traps among your circuits, questions whose answers you already know, and turns them into a receipt: how many of your answers you can trust.</p>
+    <div class="landing-cta">
+      <button class="btn btn-lg" id="openConsole">Open the console <span aria-hidden="true">→</span></button>
+      <span class="landing-note">Built with Qiskit. Runs on the machine you pick: a simulator, an IBM noise model, or IonQ.</span>
+    </div>
+    <dl class="landing-facts">
+      <div><dt>Hidden traps</dt><dd>Same shape as your real work. The cloud can't tell them apart.</dd></div>
+      <div><dt>A receipt, not a guess</dt><dd>"At least 83% of your answers are right", with 95% confidence.</dd></div>
+      <div><dt>Tested against cheaters</dt><dd>Lazy, cheap, skimping and smart clouds. See which ones get caught.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div id="console" hidden>
 <header class="top">
   <div class="wrap top-in">
-    <span class="mark"><svg class="i"><use href="#bird"/></svg> Canary</span>
-    <span class="top-tag">Catch a quantum cloud that cheats · Qollab × IonQ hackathon</span>
+    <span class="mark"><svg class="i"><use href="#bird"/></svg> Canary <span class="top-sub">console</span></span>
+    <button class="btn ghost btn-sm" id="backToStart">← Start</button>
   </div>
 </header>
 
 <main>
-<section class="hero wrap">
-  <h1>A quantum computer's answer can't be checked. That's the point of it.<br><span>So how do you know your quantum cloud didn't cheat?</span></h1>
-  <p class="lede">You rent quantum computers over the cloud. A provider could quietly run a cheaper machine, skip part of your job, or send back made-up numbers, and no normal computer can redo the work to catch it. Canary hides <b>traps</b> inside your job: circuits that look like the rest but whose answer you already know. Then it turns the traps into a receipt that says how many of your answers you can trust.</p>
-</section>
-
 <section class="act wrap" id="act1">
   <div class="act-head"><span class="num">1</span><div><h2>Your job</h2><p>30 real circuits you're paying for. Pick how many traps to hide among them, and pick how the second cloud cheats.</p></div></div>
   <div class="panel controls">
@@ -85,6 +99,7 @@
   </div>
 </section>
 </main>
+</div>
 
 <div class="tip" id="tip" hidden></div>
 </body>
