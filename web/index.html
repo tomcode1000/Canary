@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath fill=%22%23f4c430%22 d=%22M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z%22/%3E%3C/svg%3E">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="bird" viewBox="0 0 24 24"><path d="M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z" fill="currentColor"/><circle cx="16" cy="8.4" r=".9" fill="var(--bg)"/></symbol>
+  <symbol id="dead" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="q" viewBox="0 0 24 24"><path d="M9 9.2a3 3 0 1 1 4.2 2.8c-.8.4-1.2 1-1.2 1.8v.7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap top-in">
+    <span class="mark"><svg class="i"><use href="#bird"/></svg> Canary</span>
+    <span class="top-tag">Catch a quantum cloud that cheats · Qollab × IonQ hackathon</span>
+  </div>
+</header>
+
+<main>
+<section class="hero wrap">
+  <h1>A quantum computer's answer can't be checked. That's the point of it.<br><span>So how do you know your quantum cloud didn't cheat?</span></h1>
+  <p class="lede">You rent quantum computers over the cloud. A provider could quietly run a cheaper machine, skip part of your job, or send back made-up numbers, and no normal computer can redo the work to catch it. Canary hides <b>traps</b> inside your job: circuits that look like the rest but whose answer you already know. Then it turns the traps into a receipt that says how many of your answers you can trust.</p>
+</section>
+
+<section class="act wrap" id="act1">
+  <div class="act-head"><span class="num">1</span><div><h2>Your job</h2><p>30 real circuits you're paying for. Pick how many traps to hide among them, and pick how the second cloud cheats.</p></div></div>
+  <div class="panel controls">
+    <label class="ctl"><span>Traps hidden <b id="trapsOut">20</b></span>
+      <input type="range" id="traps" min="0" max="40" value="20">
+      <small id="trapsCost"></small></label>
+    <label class="ctl"><span>How cloud B cheats</span>
+      <select id="strategy"></select>
+      <small id="stratBlurb"></small></label>
+    <label class="ctl" id="skipCtl" hidden><span>Share it fakes <b id="skipOut">30%</b></span>
+      <input type="range" id="skip" min="5" max="90" step="5" value="30"></label>
+    <div class="ctl ctl-go"><button id="send" class="btn">Hide the traps and send</button><button id="reseed" class="btn ghost" title="Build a new random batch">New batch</button></div>
+  </div>
+  <div class="panel">
+    <div class="grid-head"><span id="batchCaption">Your view: you know which circuits are traps.</span><span class="legend-inline"><span class="sw sw-trap"><svg class="i"><use href="#bird"/></svg></span>trap <span class="sw sw-real"></span>real job</span></div>
+    <div class="cells" id="batch"></div>
+    <details class="peek"><summary>One circuit, as the server sees it</summary><p>Every circuit has the same 5 qubits, the same layers and the same gate set (RZ, SX, CX, X, SXdg). Traps use angles that are multiples of π/2, which makes their answer computable on a laptop. Real jobs use other angles.</p><pre id="preview"></pre></details>
+  </div>
+</section>
+
+<section class="act wrap" id="act2">
+  <div class="act-head"><span class="num">2</span><div><h2>Two clouds run it</h2><p>Each cloud gets the same circuits, shuffled, with nothing marking the traps. Canary checks only the traps. The real answers stay uncheckable, as they would be in real life.</p></div></div>
+  <div class="servers" id="servers"><p class="empty">Send the job to see what comes back.</p></div>
+  <div class="reveal-row" id="revealRow" hidden><button id="reveal" class="btn ghost">Reveal the truth</button><span>Only a simulation can do this: compare every real answer with the exact one, to see whether each receipt told the truth.</span></div>
+</section>
+
+<section class="act wrap" id="act3">
+  <div class="act-head"><span class="num">3</span><div><h2>How many traps is enough?</h2><p>More traps catch cheaters more often and buy a stronger promise, but every trap is compute you pay for that isn't your work.</p></div></div>
+  <div class="charts">
+    <figure class="panel chart-card"><figcaption><b>More traps, better odds</b><span>Cloud fakes <span id="curveQ"></span> of the circuits. 30 real jobs.</span></figcaption><div class="chart" id="chartCatch"></div><details class="tbl"><summary>Table</summary><div id="tblCatch"></div></details></figure>
+    <figure class="panel chart-card"><figcaption><b>Dead traps track wrong answers</b><span>One batch of <span id="sweepN"></span> on machines from well calibrated to badly calibrated (simulated).</span></figcaption><div class="chart" id="chartSweep"></div><details class="tbl"><summary>Table</summary><div id="tblSweep"></div></details></figure>
+  </div>
+  <div class="panel coverage" id="coverage"></div>
+</section>
+
+<section class="act wrap" id="act4">
+  <div class="act-head"><span class="num">4</span><div><h2>Round 2: the smart cheater</h2><p>This cloud runs each circuit for a few shots (4% of the work) to peek at the output. If one answer dominates, it guesses "trap" and sends back a polished result. Anything else it fakes. It never needs to read the gates.</p></div></div>
+  <div class="panel controls">
+    <div class="ctl"><span>Your real jobs are…</span>
+      <div class="seg" id="kindSeg"><button data-kind="flat">sampling jobs (spread-out output)</button><button data-kind="peaked">answer jobs (one clear answer)</button></div></div>
+  </div>
+  <div class="servers one" id="smart"><p class="empty">Pick the kind of job to run against the smart cheater.</p></div>
+  <p class="lesson" id="lesson" hidden></p>
+</section>
+
+<section class="wrap fine">
+  <div class="cols">
+    <div><h3>What Canary is</h3><p>Spot-checking with hidden traps, plus a statistical receipt. If the cloud can't tell traps from real jobs, the traps are a random sample of your batch, so the number of dead traps bounds the number of wrong answers (a 95% hypergeometric bound on this batch). That's the accreditation idea from Ferracin, Kapourniotis and Datta (2019). Every circuit is Pauli-twirled before sending, so machine errors hit traps and real jobs alike.</p></div>
+    <div><h3>What it isn't</h3><p>Not full verification. A server that reads the gate angles can spot Clifford traps. Hiding them needs blind quantum computing (Fitzsimons &amp; Kashefi, 2017), and checking a quantum computer with only a classical one needs Mahadev's protocol (2018). For a real trap compiler, see VeriQloud's Trapify. All machines here are simulated with Qiskit Aer.</p></div>
+  </div>
+</section>
+</main>
+
+<div class="tip" id="tip" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
