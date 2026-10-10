@@ -1,6 +1,2 @@
-qiskit==2.5.2
-qiskit-aer==0.17.2
-fastapi==0.143.0
-uvicorn==0.54.0
-pytest==9.1.1
-httpx2
+# Qollab installs this in the browser; Qiskit is all the page needs there.
+qiskit>=2.5.2,<3.0.0

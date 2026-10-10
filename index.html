@@ -6,7 +6,7 @@
 <title>Canary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="main.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath fill=%22%23f4c430%22 d=%22M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z%22/%3E%3C/svg%3E">
 </head>
 <body>
@@ -41,8 +41,11 @@
       <small id="stratBlurb"></small></label>
     <label class="ctl" id="skipCtl" hidden><span>Share it fakes <b id="skipOut">30%</b></span>
       <input type="range" id="skip" min="5" max="90" step="5" value="30"></label>
+    <label class="ctl ctl-shots"><span>Shots per circuit</span>
+      <select id="shots"><option value="100">100</option><option value="300" selected>300</option><option value="1000">1000</option></select></label>
     <div class="ctl ctl-go"><button id="send" class="btn">Hide the traps and send</button><button id="reseed" class="btn ghost" title="Build a new random batch">New batch</button></div>
   </div>
+  <p class="status" id="status" role="status"></p>
   <div class="panel">
     <div class="grid-head"><span id="batchCaption">Your view: you know which circuits are traps.</span><span class="legend-inline"><span class="sw sw-trap"><svg class="i"><use href="#bird"/></svg></span>trap <span class="sw sw-real"></span>real job</span></div>
     <div class="cells" id="batch"></div>
@@ -78,12 +81,11 @@
 <section class="wrap fine">
   <div class="cols">
     <div><h3>What Canary is</h3><p>Spot-checking with hidden traps, plus a statistical receipt. If the cloud can't tell traps from real jobs, the traps are a random sample of your batch, so the number of dead traps bounds the number of wrong answers (a 95% hypergeometric bound on this batch). That's the accreditation idea from Ferracin, Kapourniotis and Datta (2019). Every circuit is Pauli-twirled before sending, so machine errors hit traps and real jobs alike.</p></div>
-    <div><h3>What it isn't</h3><p>Not full verification. A server that reads the gate angles can spot Clifford traps. Hiding them needs blind quantum computing (Fitzsimons &amp; Kashefi, 2017), and checking a quantum computer with only a classical one needs Mahadev's protocol (2018). For a real trap compiler, see VeriQloud's Trapify. All machines here are simulated with Qiskit Aer.</p></div>
+    <div><h3>What it isn't</h3><p>Not full verification. A server that reads the gate angles can spot Clifford traps. Hiding them needs blind quantum computing (Fitzsimons &amp; Kashefi, 2017), and checking a quantum computer with only a classical one needs Mahadev's protocol (2018). For a real trap compiler, see VeriQloud's Trapify. Cloud A is the backend you picked; the cheating clouds are simulated on top of it.</p></div>
   </div>
 </section>
 </main>
 
 <div class="tip" id="tip" hidden></div>
-<script src="app.js"></script>
 </body>
 </html>

@@ -48,6 +48,8 @@ b { font-weight: 600; }
 .ctl > span { font-size: 13px; color: var(--text-secondary); }
 .ctl > span b { color: var(--text-primary); }
 .ctl small { color: var(--text-muted); font-size: 12.5px; min-height: 1.4em; }
+.ctl-shots { flex: none; min-width: 120px; }
+.status { color: var(--text-muted); font-size: 13px; margin: 0 0 10px; min-height: 1.4em; font-family: var(--mono); }
 .ctl-go { flex-direction: row; flex: none; min-width: 0; gap: 8px; }
 input[type=range] { accent-color: var(--brand); width: 100%; }
 select { background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit; }

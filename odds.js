@@ -1,7 +1,9 @@
-{
+// Written by `python -m engine.odds`. Measured locally on Qiskit Aer.
+export const ODDS = {
  "catch_curve": {
   "q": 0.1,
   "n_real": 30,
+  "repeats": 200,
   "traps": [
    1,
    2,
@@ -23,14 +25,14 @@
    0.9616353127674837
   ],
   "measured": [
-   0.11666666666666667,
-   0.23333333333333334,
-   0.4166666666666667,
-   0.5333333333333333,
-   0.6333333333333333,
-   0.8166666666666667,
-   0.9,
-   0.9833333333333333
+   0.155,
+   0.22,
+   0.315,
+   0.59,
+   0.69,
+   0.825,
+   0.94,
+   0.975
   ],
   "clean_bound": [
    0.9666666666666667,
@@ -70,48 +72,48 @@
    {
     "level": 0.2,
     "wrong": 0.02,
-    "dead": 0.0
+    "dead": 0.02
+   },
+   {
+    "level": 0.25,
+    "wrong": 0.1,
+    "dead": 0.15
    },
    {
     "level": 0.3,
-    "wrong": 0.29,
-    "dead": 0.29
+    "wrong": 0.32,
+    "dead": 0.39
    },
    {
     "level": 0.35,
-    "wrong": 0.53,
-    "dead": 0.53
+    "wrong": 0.59,
+    "dead": 0.59
    },
    {
     "level": 0.4,
-    "wrong": 0.74,
-    "dead": 0.68
+    "wrong": 0.76,
+    "dead": 0.72
    },
    {
     "level": 0.45,
-    "wrong": 0.84,
-    "dead": 0.82
+    "wrong": 0.85,
+    "dead": 0.85
    },
    {
     "level": 0.5,
-    "wrong": 0.89,
-    "dead": 0.89
-   },
-   {
-    "level": 0.6,
-    "wrong": 0.97,
-    "dead": 0.95
+    "wrong": 0.95,
+    "dead": 0.92
    }
   ]
  },
  "coverage": {
-  "runs": 200,
+  "runs": 500,
   "confidence": 0.95,
   "held": {
    "honest": 1.0,
-   "lazy": 0.995,
-   "cheap": 1.0,
-   "skimp 30%": 0.97
+   "lazy": 0.998,
+   "cheap": 0.996,
+   "skimp 30%": 0.984
   }
  }
-}
+};

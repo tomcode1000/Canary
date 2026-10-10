@@ -3,10 +3,15 @@ import random
 import pytest
 from qiskit.quantum_info import Statevector
 
-from engine import checker
+import json
+
+from qiskit_aer import AerSimulator
+
+from engine import bridge, checker, clouds
 from engine.circuits import FLAT_MAX, PEAK_MIN, make_batch, make_flat, make_peaked, make_trap
 from engine.job import run_job
-from engine.servers import HonestServer, LazyServer, SmartCheaterServer
+
+AER = AerSimulator()
 
 
 def _unmeasured(job):
@@ -66,14 +71,47 @@ def test_bound_grows_with_failures_and_shrinks_with_traps():
     assert checker.wrong_share_bound(0, 40, 30) < checker.wrong_share_bound(0, 10, 30)
 
 
-def test_honest_server_passes_and_cheaters_are_caught():
-    _, (honest, lazy) = run_job([HonestServer(5), LazyServer(5)], seed=5)
+def test_honest_cloud_passes_and_cheaters_are_caught():
+    run = run_job(AER, seed=5, shots=300)
+    honest, lazy, cheap = run.report("honest"), run.report("lazy"), run.report("cheap")
     assert not honest.receipt.caught and honest.actually_wrong == 0
     assert lazy.receipt.caught and lazy.receipt.failed >= 15
+    assert cheap.receipt.caught and cheap.actually_wrong > 0
 
 
 def test_smart_cheater_fools_traps_only_when_jobs_look_different():
-    _, (flat,) = run_job([SmartCheaterServer(6)], real_kind="flat", seed=6)
+    flat = run_job(AER, real_kind="flat", seed=6, shots=300).report("smart")
     assert not flat.receipt.caught and flat.actually_wrong_share == 1.0
-    _, (peaked,) = run_job([SmartCheaterServer(6)], real_kind="peaked", seed=6)
+    peaked = run_job(AER, real_kind="peaked", seed=6, shots=300).report("smart")
     assert not peaked.receipt.caught and peaked.actually_wrong == 0
+
+
+def test_skimp_only_adds_fakes_as_skip_grows():
+    run = run_job(AER, seed=7, shots=100)
+    fakes = lambda skip: {i for i, (a, b) in enumerate(zip(clouds.respond("skimp", run.honest, run.cheap, 7, skip), run.honest)) if a != b}
+    assert fakes(0.2) <= fakes(0.5) <= fakes(0.9)
+
+
+class CountingBackend(AerSimulator):
+    """Aer that counts jobs: IonQ on Qollab allows one per run."""
+
+    jobs = 0
+
+    def run(self, circuits, **kw):
+        self.jobs += 1
+        return super().run(circuits, **kw)
+
+
+def test_page_flow_uses_one_backend_job():
+    backend = CountingBackend()
+    bridge.build(seed=3)
+    layout = json.loads(bridge.layout(n_traps=12))
+    assert sum(c["kind"] == "trap" for c in layout) == 12 and len(layout) == 42
+    json.loads(bridge.send(backend, shots=100))
+    for strategy in ("lazy", "cheap", "skimp", "smart"):
+        for n in (0, 5, 40):
+            servers = json.loads(bridge.report(strategy, n, 0.4))["servers"]
+            assert [s["receipt"]["traps"] for s in servers] == [n, n]
+    for kind in ("flat", "peaked"):
+        assert json.loads(bridge.smart(kind))["servers"][0]["receipt"]["traps"] == 20
+    assert backend.jobs == 1

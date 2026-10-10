@@ -1,33 +1,34 @@
-"use strict";
+// The page. Everything quantum happens in Python (engine/bridge.py); this
+// file only draws. `start(api, odds)` is called by main.js on Qollab and by
+// local.js on the dev server, each passing the same api:
+//   build(seed) layout(nTraps) send(shots) report(strategy, nTraps, skip) smart(kind)
 
 const $ = (s) => document.querySelector(s);
 const pct = (x) => `${Math.round(x * 100)}%`;
 const N_REAL = 30;
 const NAMES = { honest: "Honest", lazy: "Lazy", cheap: "Cheap machine", skimp: "Skimps", smart: "Smart cheater" };
+const BLURBS = {
+  lazy: "Runs nothing. Sends back random bitstrings.",
+  cheap: "Runs everything, but on a cheaper machine: badly calibrated, noisier readout.",
+  skimp: "Runs some circuits properly and fakes the rest.",
+};
 const icon = (id) => `<svg class="i"><use href="#${id}"/></svg>`;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const state = { traps: 20, strategy: "cheap", skip: 0.3, seed: 1, run: null, odds: null };
+const state = { traps: 20, strategy: "cheap", skip: 0.3, seed: 1, shots: 300, sent: null, odds: null, api: null };
 
-async function api(path, params = {}) {
-  const res = await fetch(`${path}?${new URLSearchParams(params)}`);
-  if (!res.ok) throw new Error(`${path}: ${res.status}`);
-  return res.json();
-}
-
-function runParams(extra = {}) {
-  return { strategy: state.strategy, n_real: N_REAL, n_traps: state.traps, skip: state.skip, seed: state.seed, ...extra };
+function status(text) {
+  $("#status").textContent = text;
 }
 
 /* ---------- Act 1: the batch ---------- */
 
-function renderBatch(run) {
-  const cells = run.servers[0].circuits
+async function showLayout() {
+  const cells = await state.api.layout(state.traps);
+  $("#batch").innerHTML = cells
     .map((c) => (c.kind === "trap" ? `<div class="cell trap" data-tip="Trap · you know its answer: ${c.expected}">${icon("bird")}</div>` : `<div class="cell" data-tip="Real job"></div>`))
     .join("");
-  $("#batch").innerHTML = cells;
   $("#batchCaption").textContent = "Your view: you know which circuits are traps.";
-  $("#preview").textContent = run.circuit_preview;
 }
 
 function updateControls() {
@@ -36,26 +37,35 @@ function updateControls() {
   $("#trapsCost").textContent = state.traps ? `${pct(share)} of what you pay goes on checks.` : "No traps: nothing is checked.";
   $("#skipCtl").hidden = state.strategy !== "skimp";
   $("#skipOut").textContent = pct(state.skip);
-  const s = (state.strategies || []).find((x) => x.name === state.strategy);
-  $("#stratBlurb").textContent = s ? s.blurb : "";
+  $("#stratBlurb").textContent = BLURBS[state.strategy];
+  $("#shots").disabled = !!state.sent;
+  const oneJob = state.sent && /ionq/i.test(state.sent.backend);
+  $("#reseed").disabled = oneJob;
+  $("#reseed").title = oneJob ? "IonQ allows one job per run. Press Run again for a new batch." : "Build a new random batch";
   if (state.odds) drawCatch();
 }
 
-let loadToken = 0;
-async function loadBatch() {
-  const token = ++loadToken;
-  $("#send").disabled = true;
-  let run;
-  try {
-    run = await api("/api/run", runParams());
-  } catch (err) {
-    $("#batch").innerHTML = `<p class="empty">Couldn't build the batch (${err.message}). Is the server running?</p>`;
-    return;
-  }
-  if (token !== loadToken) return;
-  state.run = run;
-  renderBatch(run);
-  $("#send").disabled = false;
+async function newBatch() {
+  state.sent = null;
+  $("#servers").innerHTML = `<p class="empty">Send the job to see what comes back.</p>`;
+  $("#smart").innerHTML = `<p class="empty">Pick the kind of job to run against the smart cheater.</p>`;
+  $("#lesson").hidden = true;
+  $("#revealRow").hidden = true;
+  document.querySelectorAll("#kindSeg button").forEach((b) => b.classList.remove("on"));
+  const built = await state.api.build(state.seed);
+  $("#preview").textContent = built.preview;
+  await showLayout();
+  status("");
+  updateControls();
+}
+
+/** The one backend job: every circuit any cloud needs, for both acts. */
+async function ensureSent() {
+  if (state.sent) return;
+  status(`Running ${2 * (N_REAL + 40) + N_REAL + 20} circuits × ${state.shots} shots as one job on the backend you picked…`);
+  state.sent = await state.api.send(state.shots);
+  status(`Ran on ${state.sent.backend} · ${state.sent.shots} shots · ${state.sent.seconds}s`);
+  updateControls();
 }
 
 /* ---------- Act 2: servers ---------- */
@@ -78,7 +88,7 @@ function serverCard(r, label) {
   const promise = rc.caught ? `Up to <b>${pct(rc.max_wrong)}</b> of your answers may be wrong.` : `At least <b>${pct(rc.min_right)}</b> of your answers are right.`;
   return `<article class="panel server" data-server="${r.server}">
     <h3>${label} · ${NAMES[r.server]}<small>spent ${pct(r.cost)} of the price</small></h3>
-    <p class="blurb">${r.blurb}</p>
+    <p class="blurb">${r.server === "honest" && state.sent ? `Runs every circuit on <b>${state.sent.backend}</b>, every shot.` : r.blurb}</p>
     <div class="cells">${r.circuits.map(cellFor).join("")}</div>
     <div class="receipt" hidden>
       <span class="verdict ${rc.caught ? "caught" : "pass"}">${icon(rc.caught ? "dead" : "tick")} ${rc.caught ? "CAUGHT" : "PASSED"}</span>
@@ -90,14 +100,14 @@ function serverCard(r, label) {
   </article>`;
 }
 
-async function animate(container) {
+async function animate(container, step = 28) {
   const cells = [...container.querySelectorAll(".cell.pending")];
   for (let i = 0; i < cells.length; i++) {
     const c = cells[i];
     c.classList.remove("pending");
     if (c.dataset.final !== "real") c.classList.add(c.dataset.final);
     c.innerHTML = icon(c.dataset.icon);
-    if (i % 3 === 2) await wait(28);
+    if (step && i % 3 === 2) await wait(step);
   }
   container.querySelectorAll(".receipt").forEach((r) => (r.hidden = false));
 }
@@ -120,20 +130,32 @@ function reveal(container) {
   });
 }
 
-async function send() {
-  if (!state.run) return;
+async function send(animated = true) {
   $("#send").disabled = true;
-  document.querySelectorAll("#batch .cell.trap").forEach((c) => c.classList.add("hidden-trap"));
-  $("#batchCaption").textContent = `What the clouds see: ${N_REAL + state.traps} circuits with the same shape. Nothing marks the traps.`;
-  await wait(900);
-  const [a, b] = state.run.servers;
-  const box = $("#servers");
-  box.innerHTML = serverCard(a, "Cloud A") + serverCard(b, "Cloud B");
-  $("#revealRow").hidden = true;
-  box.scrollIntoView({ behavior: "smooth", block: "start" });
-  await animate(box);
-  $("#revealRow").hidden = false;
-  $("#send").disabled = false;
+  try {
+    document.querySelectorAll("#batch .cell.trap").forEach((c) => c.classList.add("hidden-trap"));
+    $("#batchCaption").textContent = `What the clouds see: ${N_REAL + state.traps} circuits with the same shape. Nothing marks the traps.`;
+    if (animated) await wait(900);
+    await ensureSent();
+    const { servers } = await state.api.report(state.strategy, state.traps, state.skip);
+    const box = $("#servers");
+    const wasRevealed = !!box.querySelector(".revealed");
+    box.innerHTML = serverCard(servers[0], "Cloud A") + serverCard(servers[1], "Cloud B");
+    if (animated) {
+      $("#revealRow").hidden = true;
+      box.scrollIntoView({ behavior: "smooth", block: "start" });
+      await animate(box);
+    } else {
+      await animate(box, 0);
+      if (wasRevealed) reveal(box);
+    }
+    $("#revealRow").hidden = false;
+  } catch (err) {
+    status(`Something went wrong: ${err.message || err}`);
+    throw err;
+  } finally {
+    $("#send").disabled = false;
+  }
 }
 
 /* ---------- Act 4: smart cheater ---------- */
@@ -143,19 +165,18 @@ async function runSmart(kind) {
   const box = $("#smart");
   box.innerHTML = `<p class="empty">Running…</p>`;
   $("#lesson").hidden = true;
-  const run = await api("/api/run", { strategy: "smart", real_kind: kind, n_real: N_REAL, n_traps: 20, seed: state.seed });
-  const r = run.servers[1];
+  await ensureSent();
+  const r = (await state.api.smart(kind)).servers[0];
   box.innerHTML = serverCard(r, "Cloud C");
   await animate(box);
   await wait(500);
   reveal(box);
   const fooled = !r.receipt.caught && r.truth.wrong_share > r.receipt.max_wrong;
-  const lesson = fooled
+  $("#lesson").innerHTML = fooled
     ? `<b>Fooled.</b> All traps survived, yet ${r.truth.wrong} of ${r.truth.real_jobs} real results are junk. The traps had one sharp answer and these jobs didn't, so a quick peek told the cheater which was which. A trap is only as good as its disguise, and that includes what its output looks like.`
     : !r.receipt.caught && r.truth.wrong === 0
       ? `<b>Not fooled.</b> Here the real jobs look just like traps, so the only way past the traps was to get every answer right. Traps don't catch cheating. They catch wrong answers, which is the only kind of cheating that costs you anything.`
       : `<b>${r.receipt.caught ? "Caught." : "Passed."}</b> ${r.receipt.failed} of ${r.receipt.traps} traps dead; ${r.truth.wrong} of ${r.truth.real_jobs} real answers actually wrong.`;
-  $("#lesson").innerHTML = lesson;
   $("#lesson").hidden = false;
 }
 
@@ -289,35 +310,38 @@ document.addEventListener("mousemove", (e) => {
   else if (!e.target.closest || !e.target.closest(".chart svg")) hideTip();
 });
 
+
 /* ---------- Wire up ---------- */
 
 let debounce;
-function changed() {
+function changed(layoutChanged) {
   updateControls();
   clearTimeout(debounce);
-  debounce = setTimeout(loadBatch, 250);
+  debounce = setTimeout(async () => {
+    if (layoutChanged) await showLayout();
+    if (state.sent && $("#servers .server")) await send(false);
+  }, 150);
 }
 
-async function main() {
-  state.strategies = (await api("/api/strategies")).filter((s) => s.name !== "smart");
-  $("#strategy").innerHTML = state.strategies.map((s) => `<option value="${s.name}" ${s.name === state.strategy ? "selected" : ""}>${NAMES[s.name]}</option>`).join("");
-  $("#traps").addEventListener("input", (e) => ((state.traps = +e.target.value), changed()));
-  $("#strategy").addEventListener("change", (e) => ((state.strategy = e.target.value), changed()));
-  $("#skip").addEventListener("input", (e) => ((state.skip = +e.target.value / 100), changed()));
-  $("#reseed").addEventListener("click", () => ((state.seed += 1), changed()));
-  $("#send").addEventListener("click", send);
+export async function start(api, odds) {
+  state.api = api;
+  state.odds = odds;
+  $("#strategy").innerHTML = Object.keys(BLURBS).map((s) => `<option value="${s}" ${s === state.strategy ? "selected" : ""}>${NAMES[s]}</option>`).join("");
+  $("#traps").addEventListener("input", (e) => ((state.traps = +e.target.value), changed(true)));
+  $("#strategy").addEventListener("change", (e) => ((state.strategy = e.target.value), changed(false)));
+  $("#skip").addEventListener("input", (e) => ((state.skip = +e.target.value / 100), changed(false)));
+  $("#shots").addEventListener("change", (e) => (state.shots = +e.target.value));
+  $("#reseed").addEventListener("click", () => ((state.seed += 1), newBatch()));
+  $("#send").addEventListener("click", () => send(true));
   $("#reveal").addEventListener("click", () => reveal($("#servers")));
   document.querySelectorAll("#kindSeg button").forEach((b) => b.addEventListener("click", () => runSmart(b.dataset.kind)));
-  updateControls();
-  loadBatch();
+  drawCatch();
+  drawSweep();
+  drawCoverage();
+  status("Building the batch…");
   try {
-    state.odds = await api("/api/odds");
-    drawCatch();
-    drawSweep();
-    drawCoverage();
-  } catch {
-    $("#act3 .charts").innerHTML = `<p class="empty">Charts need <code>python -m engine.odds</code> to run once.</p>`;
+    await newBatch();
+  } catch (err) {
+    status(`Couldn't build the batch: ${err.message || err}`);
   }
 }
-
-main();
