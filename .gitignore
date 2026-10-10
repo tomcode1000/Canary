@@ -4,3 +4,4 @@ __pycache__/
 .pytest_cache/
 BRIEF.txt
 BUILD-PLAN.txt
+DESIGN-BRIEF.txt
