@@ -8,9 +8,14 @@ everything as ONE backend job (IonQ allows one job per run), and then
 report() / smart() only re-slice what came back, so sliders are instant.
 """
 
+import hashlib
 import json
+import math
 import random
 import time
+from datetime import datetime, timezone
+
+from qiskit import qasm2
 
 from .circuits import make_batch
 from .job import Executed, JobReport, execute_batches
@@ -37,7 +42,29 @@ def build(seed: int = 1) -> str:
     order = rng.sample(traps, len(traps))
     _state.clear()
     _state.update(seed=seed, peaked=peaked, flat=flat, trap_rank={i: order.index(i) for i in traps}, runs=None)
-    return json.dumps({"seed": seed, "preview": str(peaked[0].circuit.draw(output="text", fold=-1))})
+    return json.dumps({"seed": seed, "qasm": qasm2.dumps(peaked[0].circuit), "ops": _ops(peaked[0].circuit)})
+
+
+def _angle(x: float) -> str:
+    """Angles as multiples of pi where they are, decimals otherwise."""
+    k = x / (math.pi / 4)
+    if abs(k - round(k)) < 1e-9:
+        n = round(k)
+        return {0: "0", 4: "π", -4: "-π"}.get(n) or (f"{n // 2}π/2" if n % 2 == 0 else f"{n}π/4").replace("1π", "π")
+    return f"{x:.2f}"
+
+
+def _ops(circuit) -> list[list[str]]:
+    """The circuit as the server receives it: [gate, qubits, angle]."""
+    out = []
+    for inst in circuit.data:
+        name = inst.operation.name
+        if name in ("barrier", "measure"):
+            continue
+        qubits = ",".join(str(circuit.find_bit(q).index) for q in inst.qubits)
+        params = ",".join(_angle(float(p)) for p in inst.operation.params)
+        out.append([name.upper(), qubits, params])
+    return out
 
 
 def layout(n_traps: int = 20) -> str:
@@ -50,13 +77,23 @@ def send(backend, shots: int = 300) -> str:
     start = time.time()
     peaked, flat = execute_batches(backend, [_state["peaked"], _state["flat"]], shots, _state["seed"], [True, False])
     _state["runs"] = {"peaked": peaked, "flat": flat}
-    return json.dumps({"backend": str(getattr(backend, "name", backend)), "shots": shots, "seconds": round(time.time() - start, 1)})
+    _state["sent"] = {
+        "backend": str(getattr(backend, "name", backend)),
+        "shots": shots,
+        "seconds": round(time.time() - start, 1),
+        "ran_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+    }
+    return json.dumps(_state["sent"])
 
 
 def _report_dict(r: JobReport, top_k: int = 4) -> dict:
     shots = sum(r.results[0].counts.values()) if r.results else 0
+    # The receipt ID fingerprints exactly what this cloud returned.
+    digest = hashlib.sha256(json.dumps([c.counts for c in r.results], sort_keys=True).encode()).hexdigest()
     return {
         "server": r.cloud,
+        "receipt_id": f"{digest[:8]}-{digest[8:12]}-{digest[12:16]}",
+        "ran_at": _state.get("sent", {}).get("ran_at"),
         "blurb": r.blurb,
         "cost": r.cost,
         "receipt": {

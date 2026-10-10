@@ -5,100 +5,232 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Canary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="main.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath fill=%22%23f4c430%22 d=%22M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z%22/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23131415%22/%3E%3Ctext x=%2216%22 y=%2223%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22700%22 font-size=%2220%22 fill=%22%23f5c842%22%3EC%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="bird" viewBox="0 0 24 24"><path d="M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z" fill="currentColor"/><circle cx="16" cy="8.4" r=".9" fill="var(--bg)"/></symbol>
-  <symbol id="dead" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></symbol>
-  <symbol id="q" viewBox="0 0 24 24"><path d="M9 9.2a3 3 0 1 1 4.2 2.8c-.8.4-1.2 1-1.2 1.8v.7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></symbol>
-  <symbol id="tick" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <defs>
+    <symbol id="bird" viewBox="0 0 24 24"><path d="M15.5 5.5a3.5 3.5 0 0 1 3.4 2.7l2.6.8-2.5 1.4c-.2 4.8-4 8.6-8.8 8.6H5l2.4-2.6C5 15.3 3.5 13 3.5 10.5c2.6 1.6 5.6 2 8.6 1.2.1-3.4 1.2-6.2 3.4-6.2Z" fill="currentColor"/></symbol>
+    <symbol id="x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="tick" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.6 4.5 4.5 0 0 0 7 18.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="7" y="7" width="10" height="10" rx="2"/><rect x="10" y="10" width="4" height="4" rx=".5"/><path d="M10 4v3M14 4v3M10 17v3M14 17v3M4 10h3M4 14h3M17 10h3M17 14h3"/></g></symbol>
+    <symbol id="i-laptop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M3 19h18M10.5 9 9 10.5l1.5 1.5M13.5 9l1.5 1.5-1.5 1.5"/></g></symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></g></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m15.5 15.5 4 4"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M10.6 6A10 10 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.7 3.4M6.6 7.6C3.9 9.4 2.5 12 2.5 12S6 18.5 12 18.5c1.6 0 3-.4 4.2-1.1"/><path d="M9.9 10a3 3 0 0 0 4.1 4.1"/></g></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 21 19.5H3z"/><path d="M12 10v4.2M12 17h.01"/></g></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 19 6v5.5c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="m7.5 15 3.5-4 3 2.5 5-6"/></g></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></g></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 11.5 20 4l-6 16-3-6.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M19 4.5V8h-3.5"/></g></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m9 8-4 4 4 4M15 8l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></g></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
 </svg>
 
-<section class="landing" id="landing">
-  <canvas class="landing-circuit" id="circuit" aria-hidden="true"></canvas>
-  <div class="landing-in">
-    <span class="mark mark-lg"><svg class="i"><use href="#bird"/></svg> Canary</span>
-    <h1>Catch a quantum cloud that cheats.</h1>
-    <p class="landing-lede">A quantum computer's answer can't be checked by a normal computer. That's the point of it. So when you rent one over the cloud, how do you know it did the work? Canary hides traps among your circuits, questions whose answers you already know, and turns them into a receipt: how many of your answers you can trust.</p>
-    <div class="landing-cta">
-      <button class="btn btn-lg" id="openConsole">Open the console <span aria-hidden="true">→</span></button>
-      <span class="landing-note">Built with Qiskit. Runs on the machine you pick: a simulator, an IBM noise model, or IonQ.</span>
+<!-- ============================== LANDING ============================== -->
+<div class="landing" id="landing">
+  <header class="lhead"><div class="wrap lhead-in"><span class="wordmark">Canary</span><span class="lhead-tag">Catch a quantum cloud that cheats.</span></div></header>
+
+  <section class="hero">
+    <canvas class="hero-dots" id="dots" aria-hidden="true"></canvas>
+    <div class="wrap hero-in">
+      <h1>Catch a quantum cloud<br><em>that cheats.</em></h1>
+      <p class="hero-lede">Quantum computers are powerful, but you can't check their answers. Canary hides known-answer tasks (traps) in your job and spots when a quantum cloud cuts corners, skips work, or makes things up.</p>
+      <button class="btn btn-lg open-console">Open the console <svg class="i"><use href="#i-arrow"/></svg></button>
+      <div class="hero-foot"><span class="tile tile-plain"><svg class="i"><use href="#i-cube"/></svg></span><span>Built with Qiskit. Runs on the machine you pick:<br>a simulator, an IBM noise model, or IonQ.</span></div>
     </div>
-    <dl class="landing-facts">
-      <div><dt>Hidden traps</dt><dd>Same shape as your real work. The cloud can't tell them apart.</dd></div>
-      <div><dt>A receipt, not a guess</dt><dd>"At least 83% of your answers are right", with 95% confidence.</dd></div>
-      <div><dt>Tested against cheaters</dt><dd>Lazy, cheap, skimping and smart clouds. See which ones get caught.</dd></div>
-    </dl>
-  </div>
-</section>
+  </section>
 
-<div id="console" hidden>
-<header class="top">
-  <div class="wrap top-in">
-    <span class="mark"><svg class="i"><use href="#bird"/></svg> Canary <span class="top-sub">console</span></span>
-    <button class="btn ghost btn-sm" id="backToStart">← Start</button>
-  </div>
-</header>
+  <section class="lsec">
+    <div class="wrap lsplit">
+      <div>
+        <p class="eyebrow"><span>02</span> / The problem</p>
+        <h2>You can't check a <em>quantum computer's answer.</em></h2>
+        <p class="lede">Quantum computers are powerful, but they run in the cloud. Your normal computer can't simply redo the work to verify the answer, so you have to trust the cloud.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-step"><span class="tile tile-lg tile-plain"><svg class="i"><use href="#i-laptop"/></svg></span><b>Your computer</b><span>Prepares the job and sends it to a quantum cloud.</span></div>
+        <svg class="i flow-arrow"><use href="#i-arrow"/></svg>
+        <div class="flow-step"><span class="tile tile-lg"><svg class="i"><use href="#i-chip"/></svg></span><b>Quantum cloud</b><span>Runs the job and returns an answer.</span></div>
+        <svg class="i flow-arrow"><use href="#i-arrow"/></svg>
+        <div class="flow-step"><span class="tile tile-lg tile-bad"><svg class="i"><use href="#i-alert"/></svg></span><b>The problem</b><span>You can't check if the answer is actually correct.</span></div>
+      </div>
+    </div>
+    <div class="wrap grid3">
+      <article class="card pad"><span class="tile"><svg class="i"><use href="#i-cloud"/></svg></span><h3>A cloud you don't control.</h3><p>The quantum computer lives in someone else's data centre. They could use a cheaper machine, skip work, or return made-up results.</p></article>
+      <article class="card pad"><span class="tile"><svg class="i"><use href="#i-eye-off"/></svg></span><h3>No easy way to verify.</h3><p>Normal computers can't repeat the work of a quantum computer. That's the whole point of one, so you can't double-check the answer.</p></article>
+      <article class="card pad"><span class="tile"><svg class="i"><use href="#i-alert"/></svg></span><h3>Small errors, real costs.</h3><p>A wrong answer feeding a drug candidate, a material or a risk number is a costly decision made on bad data.</p></article>
+    </div>
+  </section>
 
-<main>
-<section class="act wrap" id="act1">
-  <div class="act-head"><span class="num">1</span><div><h2>Your job</h2><p>30 real circuits you're paying for. Pick how many traps to hide among them, and pick how the second cloud cheats.</p></div></div>
-  <div class="panel controls">
-    <label class="ctl"><span>Traps hidden <b id="trapsOut">20</b></span>
-      <input type="range" id="traps" min="0" max="40" value="20">
-      <small id="trapsCost"></small></label>
-    <label class="ctl"><span>How cloud B cheats</span>
-      <select id="strategy"></select>
-      <small id="stratBlurb"></small></label>
-    <label class="ctl" id="skipCtl" hidden><span>Share it fakes <b id="skipOut">30%</b></span>
-      <input type="range" id="skip" min="5" max="90" step="5" value="30"></label>
-    <label class="ctl ctl-shots"><span>Shots per circuit</span>
-      <select id="shots"><option value="100">100</option><option value="300" selected>300</option><option value="1000">1000</option></select></label>
-    <div class="ctl ctl-go"><button id="send" class="btn">Hide the traps and send</button><button id="reseed" class="btn ghost" title="Build a new random batch">New batch</button></div>
-  </div>
-  <p class="status" id="status" role="status"></p>
-  <div class="panel">
-    <div class="grid-head"><span id="batchCaption">Your view: you know which circuits are traps.</span><span class="legend-inline"><span class="sw sw-trap"><svg class="i"><use href="#bird"/></svg></span>trap <span class="sw sw-real"></span>real job</span></div>
-    <div class="cells" id="batch"></div>
-    <details class="peek"><summary>One circuit, as the server sees it</summary><p>Every circuit has the same 5 qubits, the same layers and the same gate set (RZ, SX, CX, X, SXdg). Traps use angles that are multiples of π/2, which makes their answer computable on a laptop. Real jobs use other angles.</p><pre id="preview"></pre></details>
-  </div>
-</section>
+  <section class="lsec">
+    <div class="wrap lsplit">
+      <div>
+        <p class="eyebrow"><span>03</span> / The solution</p>
+        <h2>Hide known answers <em>and let Canary find out.</em></h2>
+        <p class="lede">You hide small trap tasks inside your job. They look just like the real ones, but you already know the answer. If the cloud gets the traps wrong, Canary catches it and turns the results into a receipt.</p>
+        <ol class="steps">
+          <li><span class="tile tile-sm"><svg class="i"><use href="#i-grid"/></svg></span><div><b>Add traps</b><span>Hide tasks with known answers in your job.</span></div></li>
+          <li><span class="tile tile-sm"><svg class="i"><use href="#i-cloud"/></svg></span><div><b>Send to the cloud</b><span>Run the job on the quantum machine you pick.</span></div></li>
+          <li><span class="tile tile-sm"><svg class="i"><use href="#i-search"/></svg></span><div><b>Check the traps</b><span>Canary compares the trap answers with the ones it knew.</span></div></li>
+          <li><span class="tile tile-sm"><svg class="i"><use href="#i-receipt"/></svg></span><div><b>Get a receipt</b><span>How many of your answers you can trust, or that the cloud was caught.</span></div></li>
+        </ol>
+      </div>
+      <div class="sol">
+        <div class="card sol-job"><p class="label">Your job</p><div class="cells cells-sm" id="solGrid"></div>
+          <div class="legend"><span><span class="cell trap cell-xs"><svg class="i"><use href="#bird"/></svg></span>trap (known answer)</span><span><span class="cell cell-xs"></span>real task</span></div></div>
+        <svg class="i sol-arrow"><use href="#i-arrow"/></svg>
+        <div class="sol-cloud"><span class="tile tile-lg"><svg class="i"><use href="#i-chip"/></svg></span><span class="label">Quantum cloud</span></div>
+        <svg class="i sol-arrow"><use href="#i-arrow"/></svg>
+        <div class="card sol-receipt"><p class="label">Receipt</p>
+          <div class="sol-verdict"><span class="tile tile-good"><svg class="i"><use href="#tick"/></svg></span><div><b>At least 83% right</b><span>95% confidence</span></div></div>
+          <dl class="kv-rows"><div><dt><i class="dot dot-good"></i>Alive traps</dt><dd>20</dd></div><div><dt><i class="dot dot-bad"></i>Dead traps</dt><dd>0</dd></div><div><dt>Real tasks</dt><dd>30</dd></div></dl>
+          <p class="fine">An honest run with 20 traps.</p></div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="card code-card">
+        <div class="code-intro"><span class="tile"><svg class="i"><use href="#i-code"/></svg></span><div><h3>One circuit, as the server sees it</h3><p>Traps and real tasks have the same shape and the same gates, so the cloud can't tell them apart.</p></div></div>
+        <pre class="code" id="qasm"></pre>
+      </div>
+    </div>
+  </section>
 
-<section class="act wrap" id="act2">
-  <div class="act-head"><span class="num">2</span><div><h2>Two clouds run it</h2><p>Each cloud gets the same circuits, shuffled, with nothing marking the traps. Canary checks only the traps. The real answers stay uncheckable, as they would be in real life.</p></div></div>
-  <div class="servers" id="servers"><p class="empty">Send the job to see what comes back.</p></div>
-  <div class="reveal-row" id="revealRow" hidden><button id="reveal" class="btn ghost">Reveal the truth</button><span>Only a simulation can do this: compare every real answer with the exact one, to see whether each receipt told the truth.</span></div>
-</section>
+  <section class="lsec">
+    <div class="wrap proof">
+      <div>
+        <p class="eyebrow"><span>04</span> / Proof</p>
+        <h2>The receipt <em>held.</em></h2>
+        <p class="lede" id="proofLede"></p>
+        <div class="callout"><span class="tile"><svg class="i"><use href="#i-shield"/></svg></span><div><b id="proofCallout"></b><span>A 95% receipt should hold at least 95% of the time.</span></div></div>
+      </div>
+      <figure class="card chart-card"><figcaption><b>Dead traps track wrong answers</b><span>As a machine gets worse, its traps die at the same rate its real answers go wrong. That's why the receipt works.</span></figcaption><div class="chart" id="landingSweep"></div></figure>
+      <div class="card">
+        <div class="card-head"><h3>Test coverage</h3><span class="muted" id="coverageSub"></span></div>
+        <div class="rows" id="coverageRows"></div>
+      </div>
+    </div>
+  </section>
 
-<section class="act wrap" id="act3">
-  <div class="act-head"><span class="num">3</span><div><h2>How many traps is enough?</h2><p>More traps catch cheaters more often and buy a stronger promise, but every trap is compute you pay for that isn't your work.</p></div></div>
-  <div class="charts">
-    <figure class="panel chart-card"><figcaption><b>More traps, better odds</b><span>Cloud fakes <span id="curveQ"></span> of the circuits. 30 real jobs.</span></figcaption><div class="chart" id="chartCatch"></div><details class="tbl"><summary>Table</summary><div id="tblCatch"></div></details></figure>
-    <figure class="panel chart-card"><figcaption><b>Dead traps track wrong answers</b><span>One batch of <span id="sweepN"></span> on machines from well calibrated to badly calibrated (simulated).</span></figcaption><div class="chart" id="chartSweep"></div><details class="tbl"><summary>Table</summary><div id="tblSweep"></div></details></figure>
-  </div>
-  <div class="panel coverage" id="coverage"></div>
-</section>
+  <section class="lsec lsec-last">
+    <div class="wrap lsplit">
+      <div>
+        <p class="eyebrow"><span>05</span> / What Canary isn't</p>
+        <h2>Spot-checking, <em>not full verification.</em></h2>
+        <p class="lede">A clever cloud could, in theory, read a circuit's gate angles and recognise the traps. Canary gives you evidence about a cloud's reliability, not a guarantee that every single quantum answer is correct.</p>
+      </div>
+      <div class="stack">
+        <article class="card pad row-card"><span class="tile tile-warn"><svg class="i"><use href="#i-eye"/></svg></span><div><p class="label">The limitation</p><h3>A smart cloud could spot the traps.</h3><p>Trap angles are multiples of π/2. Hiding them for real takes blind quantum computing. The console shows a smart cheater beating weak traps.</p></div></article>
+        <article class="card pad row-card"><span class="tile tile-good"><svg class="i"><use href="#i-shield"/></svg></span><div><p class="label">The real value</p><h3>Evidence, not a guarantee.</h3><p>A receipt with a stated confidence, tested against four kinds of cheating cloud. Far better than taking the cloud's word for it.</p></div></article>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="card cta-card"><div><p class="label">Ready to see it work?</p><h3>Open the console</h3><p>Hide traps, pick a cheater, and see who gets caught.</p></div><button class="btn btn-lg open-console">Open the console <svg class="i"><use href="#i-arrow"/></svg></button></div>
+    </div>
+  </section>
 
-<section class="act wrap" id="act4">
-  <div class="act-head"><span class="num">4</span><div><h2>Round 2: the smart cheater</h2><p>This cloud runs each circuit for a few shots (4% of the work) to peek at the output. If one answer dominates, it guesses "trap" and sends back a polished result. Anything else it fakes. It never needs to read the gates.</p></div></div>
-  <div class="panel controls">
-    <div class="ctl"><span>Your real jobs are…</span>
-      <div class="seg" id="kindSeg"><button data-kind="flat">sampling jobs (spread-out output)</button><button data-kind="peaked">answer jobs (one clear answer)</button></div></div>
-  </div>
-  <div class="servers one" id="smart"><p class="empty">Pick the kind of job to run against the smart cheater.</p></div>
-  <p class="lesson" id="lesson" hidden></p>
-</section>
+  <footer class="lfoot"><div class="wrap lfoot-in"><span class="wordmark wordmark-sm">Canary</span><span>Qollab × IonQ Global Quantum Hackathon · MIT licensed</span></div></footer>
+</div>
 
-<section class="wrap fine">
-  <div class="cols">
-    <div><h3>What Canary is</h3><p>Spot-checking with hidden traps, plus a statistical receipt. If the cloud can't tell traps from real jobs, the traps are a random sample of your batch, so the number of dead traps bounds the number of wrong answers (a 95% hypergeometric bound on this batch). That's the accreditation idea from Ferracin, Kapourniotis and Datta (2019). Every circuit is Pauli-twirled before sending, so machine errors hit traps and real jobs alike.</p></div>
-    <div><h3>What it isn't</h3><p>Not full verification. A server that reads the gate angles can spot Clifford traps. Hiding them needs blind quantum computing (Fitzsimons &amp; Kashefi, 2017), and checking a quantum computer with only a classical one needs Mahadev's protocol (2018). For a real trap compiler, see VeriQloud's Trapify. Cloud A is the backend you picked; the cheating clouds are simulated on top of it.</p></div>
-  </div>
-</section>
-</main>
+<!-- ============================== CONSOLE ============================== -->
+<div class="console" id="console" hidden>
+  <header class="chead">
+    <div class="chead-left"><span class="wordmark">Canary</span><button class="back" id="backToStart"><svg class="i"><use href="#i-back"/></svg>Console</button></div>
+    <span class="status-chip" id="backendChip"><i class="dot"></i><span>Not sent yet</span></span>
+  </header>
+  <nav class="side" aria-label="Console">
+    <button data-view="job" class="on"><svg class="i"><use href="#i-play"/></svg>Your job</button>
+    <button data-view="results"><svg class="i"><use href="#i-chart"/></svg>Results</button>
+    <button data-view="traps"><svg class="i"><use href="#i-target"/></svg>Trap count</button>
+    <button data-view="smart"><svg class="i"><use href="#i-eye"/></svg>Smart cheater</button>
+    <div class="side-foot card"><p class="label">Backend</p><b id="sideBackend">Picked when you send</b><span id="sideBackendSub">The machine chosen in Qollab's Select QPU.</span></div>
+  </nav>
+
+  <main class="cmain">
+    <!-- Your job -->
+    <section class="view" data-view="job">
+      <div class="view-head">
+        <div><p class="eyebrow" id="jobEyebrow">Configure your job</p><h1 id="jobTitle">Your <em>job.</em></h1>
+          <p class="lede" id="jobLede">Set how many traps to hide, choose how cloud B cheats, and send the job. Canary hides the traps and checks them when the results come back.</p></div>
+        <div class="card sees" id="sees" hidden><span class="tile"><svg class="i"><use href="#i-cloud"/></svg></span><div><p class="label">The cloud sees</p><b id="seesCount"></b><span>Nothing marks the traps.</span></div></div>
+      </div>
+      <div class="job">
+        <div class="card job-controls">
+          <label class="ctl"><span class="ctl-n">1</span><div class="ctl-body"><b>Traps hidden</b><span>How many traps to hide among 30 real tasks.</span>
+            <div class="range-row"><input type="range" id="traps" min="0" max="40" value="20"><output class="val" id="trapsOut">20</output></div><small id="trapsCost"></small></div></label>
+          <label class="ctl"><span class="ctl-n">2</span><div class="ctl-body"><b>How cloud B cheats</b><span id="stratBlurb"></span>
+            <div class="select"><select id="strategy"></select><svg class="i"><use href="#i-down"/></svg></div></div></label>
+          <label class="ctl" id="skipCtl"><span class="ctl-n">3</span><div class="ctl-body"><b>Share it fakes</b><span>Only used when Skimps is selected.</span>
+            <div class="range-row"><input type="range" id="skip" min="5" max="90" step="5" value="30"><output class="val" id="skipOut">30%</output></div></div></label>
+          <label class="ctl"><span class="ctl-n">4</span><div class="ctl-body"><b>Shots per circuit</b><span>How many times each circuit runs.</span>
+            <div class="select"><select id="shots"><option value="100">100</option><option value="300" selected>300</option><option value="1000">1000</option></select><svg class="i"><use href="#i-down"/></svg></div></div></label>
+          <div class="job-actions"><button id="send" class="btn"><svg class="i"><use href="#i-send"/></svg>Hide the traps and send</button><button id="reseed" class="btn btn-ghost"><svg class="i"><use href="#i-refresh"/></svg>New batch</button></div>
+        </div>
+        <div class="card job-batch">
+          <div class="card-head"><h3><span class="cell trap cell-xs"><svg class="i"><use href="#bird"/></svg></span>Your batch</h3><span class="muted mono" id="batchMeta"></span></div>
+          <div class="batch-body">
+            <div class="cells" id="batch"></div>
+            <dl class="kv-rows batch-kv" id="batchKv"></dl>
+          </div>
+          <p class="status mono" id="status" role="status"></p>
+        </div>
+      </div>
+      <details class="card code-card ops-card">
+        <summary><span class="tile"><svg class="i"><use href="#i-code"/></svg></span><div><h3>One circuit, as the server sees it</h3><p>Same shape, no trap markers. This is what gets sent to the cloud.</p></div><svg class="i chev"><use href="#i-down"/></svg></summary>
+        <div class="ops" id="ops"></div>
+      </details>
+    </section>
+
+    <!-- Results -->
+    <section class="view" data-view="results" hidden>
+      <div class="view-head">
+        <div><p class="eyebrow">Results</p><h1>Two clouds <em>run it.</em></h1><p class="lede">Same circuits. Same traps. Canary checks only the traps; the real answers stay uncheckable, as they would in real life.</p></div>
+        <button class="btn" id="reveal" disabled><svg class="i"><use href="#i-eye"/></svg>Reveal the truth</button>
+      </div>
+      <div class="results" id="servers"><div class="empty card">Send your job to see what comes back.</div></div>
+    </section>
+
+    <!-- Trap count -->
+    <section class="view" data-view="traps" hidden>
+      <div class="view-head">
+        <div><p class="eyebrow">Trade-off</p><h1>How many traps <em>is enough?</em></h1><p class="lede">More traps catch cheaters more often and buy a stronger promise, but every trap is compute you pay for that isn't your work.</p></div>
+        <div class="card trap-count"><p class="label">Current trap count</p><div class="range-row"><input type="range" id="traps2" min="0" max="40" value="20"><output class="val" id="traps2Out">20</output></div></div>
+      </div>
+      <div class="grid2">
+        <figure class="card chart-card"><figcaption><b>Chance of catching it</b><span>Against a cloud that fakes <span id="curveQ"></span> of the circuits, with 30 real tasks.</span></figcaption><div class="chart" id="chartCatch"></div>
+          <p class="note" id="catchNote"></p><details class="tbl"><summary>Table</summary><div id="tblCatch"></div></details></figure>
+        <figure class="card chart-card"><figcaption><b>Dead traps track wrong answers</b><span>One batch of <span id="sweepN"></span> on machines from well calibrated to badly calibrated.</span></figcaption><div class="chart" id="chartSweep"></div>
+          <p class="note">This is why trap deaths can stand in for wrong answers you can't see.</p><details class="tbl"><summary>Table</summary><div id="tblSweep"></div></details></figure>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3><span class="tile tile-sm"><svg class="i"><use href="#i-shield"/></svg></span>Does the receipt tell the truth?</h3><span class="muted" id="covSub"></span></div>
+        <div class="split" id="coverage"></div>
+      </div>
+    </section>
+
+    <!-- Smart cheater -->
+    <section class="view" data-view="smart" hidden>
+      <div class="view-head">
+        <div><p class="eyebrow">Round 2</p><h1>The smart <em>cheater.</em></h1><p class="lede" id="smartLede">This cloud peeks at each circuit with a few shots. If one answer dominates, it guesses "trap" and sends back a polished result. Everything else it fakes.</p></div>
+        <div class="seg" id="kindSeg"><button data-kind="flat">Sampling jobs</button><button data-kind="peaked">Answer jobs</button></div>
+      </div>
+      <div class="results" id="smart"><div class="empty card">Pick a kind of real job: <b>sampling jobs</b> have spread-out output, <b>answer jobs</b> have one clear answer, like traps.</div></div>
+      <div class="info"><svg class="i"><use href="#i-info"/></svg><span><b>Limitation.</b> Spot-checking can't guarantee correct answers. A cloud that can tell traps from real work can pass the traps and still return wrong results. That's why traps must look like the work, including their output.</span></div>
+    </section>
+  </main>
 </div>
 
 <div class="tip" id="tip" hidden></div>

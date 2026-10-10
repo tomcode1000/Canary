@@ -30,7 +30,7 @@ python -m engine.dev_server basic                    # open http://127.0.0.1:800
 
 ## What you do on the page
 
-The page opens on a short landing screen (an animated circuit where, every few seconds, one gate shows itself as a canary and hides again). **Open the console** to play:
+The page opens on a five-section landing page. Its background is a cloud of dots, one per measurement shot, that drifts like noise, gathers into the canary, and scatters again: random shots becoming an answer you can trust. **Open the console** to play. The console has four views:
 
 1. **Your job.** 30 real circuits. Choose how many traps to hide and how cloud B cheats: *lazy* (random answers), *cheap machine* (noisier and badly calibrated), or *skimps* (fakes a share of the circuits).
 2. **Two clouds run it.** Cloud A is the real backend you picked. Cloud B cheats on top of that same backend. Both get the same shuffled circuits. Canary checks only the traps and writes a receipt for each cloud. Then **Reveal the truth**: only a simulation can compare every real answer with the exact one, so you can see whether each receipt told the truth.
