@@ -157,6 +157,12 @@ figcaption span { color: var(--text-muted); font-size: 13px; }
 
 @media (max-width: 760px) {
   .landing-facts { grid-template-columns: 1fr; }
+  .landing-in { padding: 28px 16px; }
+  .mark-lg { margin-bottom: 18px; }
+  .landing-lede { font-size: 16px; margin-bottom: 22px; }
+  .landing-cta { margin-bottom: 26px; }
+  .landing-facts { gap: 10px; }
+  .landing-facts div { padding-top: 8px; }
   .landing::after { background: color-mix(in srgb, var(--bg) 70%, transparent); }
   .servers, .charts, .fine .cols { grid-template-columns: 1fr; }
   .top-tag { display: none; }
