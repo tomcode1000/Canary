@@ -167,10 +167,12 @@ async function send() {
   const btn = $("#send");
   btn.disabled = true;
   try {
+    // First press: hide the traps and run the job, staying on "Job sent."
+    // so the hidden batch can be seen. Second press: the results.
     if (!state.sent) {
       $$("#batch .cell.trap").forEach((c) => c.classList.add("hidden-trap"));
       await ensureSent();
-      await wait(1100);
+      return;
     }
     showView("results");
     await renderResults(true);

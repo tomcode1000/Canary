@@ -1,8 +1,9 @@
 """Run the page locally, the way Qollab runs it.
 
     python -m engine.dev_server          then open http://127.0.0.1:8000
-    python -m engine.dev_server basic    use Qiskit's BasicSimulator, as on
-                                         Qollab's built-in simulator
+                                         (Qiskit's BasicSimulator, as on
+                                         Qollab's built-in simulator)
+    python -m engine.dev_server aer      use Qiskit Aer instead
 
 Qollab loads index.html and runs main.js, which calls engine.bridge in the
 browser. Here, index.html gets local.js instead, which calls the same
@@ -21,15 +22,17 @@ from . import bridge
 
 ROOT = Path(__file__).resolve().parent.parent
 
-if "basic" in sys.argv[1:]:
-    from qiskit.providers.basic_provider import BasicSimulator
-
-    BACKEND = BasicSimulator()
-else:
+if "aer" in sys.argv[1:]:
     from qiskit_aer import AerSimulator
 
-    # Seeded, so a demo recording gives the same numbers every time.
     BACKEND = AerSimulator(seed_simulator=11)
+else:
+    from qiskit.providers.basic_provider import BasicSimulator
+
+    # Qiskit's BasicSimulator, like Qollab's built-in simulator. Seeded, so a
+    # demo recording gives the same numbers every time.
+    BACKEND = BasicSimulator()
+    BACKEND.set_options(seed_simulator=11)
 
 app = FastAPI(title="Canary (local)")
 

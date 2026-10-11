@@ -32,22 +32,27 @@ function hexToRgb(hex) {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
-export function startDots(canvas) {
+// opts (all optional, used by the demo video's motion scenes):
+//   phases  [drift, gather, hold, release] seconds; release Infinity holds
+//   place   { cx, cy, size } as fractions of the canvas (size of its height)
+export function startDots(canvas, opts = {}) {
+  const PH = opts.phases || PHASES;
   const ctx = canvas.getContext("2d");
   const css = getComputedStyle(document.documentElement);
   const ink = hexToRgb(css.getPropertyValue("--text-muted").trim() || "#8d8c84");
   const brand = hexToRgb(css.getPropertyValue("--brand").trim() || "#f4c430");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let w = 0, h = 0, dots = [], last = 0;
-  let clock = still ? PHASES[0] + PHASES[1] + 0.5 : 0;
+  let clock = still ? PH[0] + PH[1] + 0.5 : 0;
 
   function birdPoints() {
     // Sample the bird on a grid; right of the text on wide screens,
     // centred behind it on narrow ones.
     const wide = w > 820;
-    const size = wide ? Math.min(h * 0.7, w * 0.42) : Math.min(w * 0.9, h * 0.55);
-    const ox = wide ? w * 0.74 - size / 2 : (w - size) / 2;
-    const oy = (h - size) / 2;
+    const pl = opts.place;
+    const size = pl ? h * pl.size : wide ? Math.min(h * 0.7, w * 0.42) : Math.min(w * 0.9, h * 0.55);
+    const ox = pl ? w * pl.cx - size / 2 : wide ? w * 0.74 - size / 2 : (w - size) / 2;
+    const oy = pl ? h * pl.cy - size / 2 : (h - size) / 2;
     const k = size / 100;
     const off = document.createElement("canvas").getContext("2d");
     const step = Math.max(4.2, size / 88);
@@ -82,9 +87,9 @@ export function startDots(canvas) {
   }
 
   function formedness() {
-    const total = PHASES.reduce((a, b) => a + b, 0);
-    let t = clock % total;
-    const [drift, gather, hold, release] = PHASES;
+    const [drift, gather, hold, release] = PH;
+    const total = PH.reduce((a, b) => a + b, 0);
+    let t = Number.isFinite(total) ? clock % total : clock;
     if (t < drift) return 0;
     if ((t -= drift) < gather) return ease(t / gather);
     if ((t -= gather) < hold) return 1;

@@ -23,10 +23,10 @@ Track: **Quantum Unlocked** (algorithms). Built for the Qollab × IonQ Global Qu
 ```bash
 python -m venv .venv && .venv/Scripts/activate      # macOS/Linux: source .venv/bin/activate
 pip install -r requirements-dev.txt
-python -m engine.dev_server basic                    # open http://127.0.0.1:8000
+python -m engine.dev_server                          # open http://127.0.0.1:8000
 ```
 
-`basic` uses Qiskit's BasicSimulator, like Qollab's built-in simulator; leave it out to use Qiskit Aer. The charts come from `odds.js`, which ships with the repo; `python -m engine.odds` measures it again (about a minute). Tests: `python -m pytest`.
+It uses Qiskit's BasicSimulator (seeded), like Qollab's built-in simulator; add `aer` to use Qiskit Aer. The charts come from `odds.js`, which ships with the repo; `python -m engine.odds` measures it again (about a minute). Tests: `python -m pytest`.
 
 ## What you do on the page
 
