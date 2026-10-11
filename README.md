@@ -12,6 +12,10 @@ A buyer can act on a receipt. Nobody can act on "trust us".
 
 Track: **Quantum Unlocked** (algorithms). Built for the Qollab × IonQ Global Quantum Hackathon, 9–11 Oct 2026.
 
+**Live demo:** https://canary-nu-eight.vercel.app
+
+*This effort is supported by Qollab and IonQ.*
+
 ---
 
 ## Run it
