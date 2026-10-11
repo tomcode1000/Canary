@@ -1,0 +1,12 @@
+.venv
+video
+tests
+.vercel-build
+deploy
+cover.png
+BRIEF.txt
+BUILD-PLAN.txt
+DESIGN-BRIEF.txt
+__pycache__
+*.pyc
+.pytest_cache

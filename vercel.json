@@ -2,9 +2,13 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
-      "memory": 1769,
-      "excludeFiles": "{tests/**,video/**,deploy/**,*.md,local.js,main.js}"
+      "excludeFiles": "{tests/**,video/**,deploy/**,*.md,local.js,main.js,hosted.js}"
     }
   },
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/index.py" }]
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
 }

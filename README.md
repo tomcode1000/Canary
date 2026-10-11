@@ -16,6 +16,8 @@ Track: **Quantum Unlocked** (algorithms). Built for the Qollab × IonQ Global Qu
 
 ## Run it
 
+**Live:** https://canary-nu-eight.vercel.app (the same page, with the engine as a serverless function on Qiskit's BasicSimulator).
+
 **On Qollab:** press **Run** and pick any backend. The built-in simulator is instant; IonQ's remote simulators run the same job under IonQ's own noise model. Canary sends every circuit it needs (honest run, the cheap machine's run, both batches, 170 circuits) as **one job**, because IonQ allows one job per run. Everything after that, including every slider, only re-reads those results.
 
 **Locally:**

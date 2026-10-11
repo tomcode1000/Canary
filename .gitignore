@@ -9,3 +9,6 @@ video/
 cover.png
 .vercel
 .vercel-build/
+
+.vercel
+.env*.local
