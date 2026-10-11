@@ -7,3 +7,5 @@ BUILD-PLAN.txt
 DESIGN-BRIEF.txt
 video/
 cover.png
+.vercel
+.vercel-build/

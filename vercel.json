@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "memory": 1769,
+      "excludeFiles": "{tests/**,video/**,deploy/**,*.md,local.js,main.js}"
+    }
+  },
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/index.py" }]
+}
