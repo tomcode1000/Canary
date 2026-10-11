@@ -28,7 +28,8 @@ if "basic" in sys.argv[1:]:
 else:
     from qiskit_aer import AerSimulator
 
-    BACKEND = AerSimulator()
+    # Seeded, so a demo recording gives the same numbers every time.
+    BACKEND = AerSimulator(seed_simulator=11)
 
 app = FastAPI(title="Canary (local)")
 
